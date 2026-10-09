@@ -1,0 +1,7 @@
+.git
+.venv
+.coverage
+__pycache__
+htmlcov
+models
+tests

@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dice-detector"
+version = "0.1.0"
+description = "CPU-friendly ONNX detector for standard polyhedral RPG dice"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { text = "AGPL-3.0-only" }
+dependencies = [
+  "fastapi>=0.116,<1",
+  "numpy>=1.26,<3",
+  "onnxruntime>=1.21,<2",
+  "pillow>=11,<13",
+  "python-multipart>=0.0.20,<1",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx2>=2.13,<3",
+  "mypy>=1.17,<2",
+  "pytest>=9.0.3,<10",
+  "pytest-cov>=6.2,<8",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+dice-detector = "dice_detector.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dice_detector"]
+
+[tool.pytest.ini_options]
+addopts = ["--strict-markers", "--cov=dice_detector", "--cov-report=term-missing"]
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["dice_detector"]
+omit = ["src/dice_detector/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "N", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+packages = ["dice_detector"]
+
+[[tool.mypy.overrides]]
+module = ["onnxruntime.*", "PIL.*"]
+ignore_missing_imports = true

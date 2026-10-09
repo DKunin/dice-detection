@@ -1,0 +1,12 @@
+services:
+  api:
+    build: .
+    environment:
+      DICE_DETECTOR_MODEL_DIR: /models
+      DICE_DETECTOR_ONNX_THREADS: "6"
+    ports:
+      - "127.0.0.1:18080:18080"
+    volumes:
+      - ./models:/models:ro
+    restart: unless-stopped
+    init: true
