@@ -1,0 +1,53 @@
+[project]
+name = "dice-detector-roboflow-test"
+version = "0.1.0"
+description = "Isolated smoke-test client for an RPG dice model hosted by Roboflow"
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+dependencies = [
+    "inference-sdk==1.7.3",
+]
+
+[project.scripts]
+roboflow-dice-test = "roboflow_dice_test.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "bandit>=1.8.6,<2",
+    "mypy>=1.18.2,<2",
+    "pip-audit>=2.9.0,<3",
+    "pytest>=9.0.3,<10",
+    "pytest-cov>=7.0.0,<8",
+    "ruff>=0.14.0,<0.15",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/roboflow_dice_test"]
+
+[tool.pytest.ini_options]
+addopts = "--cov=roboflow_dice_test --cov-report=term-missing --cov-fail-under=80"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src", "tests"]
+
+[[tool.mypy.overrides]]
+module = ["inference_sdk", "inference_sdk.*"]
+ignore_missing_imports = true
+
+[tool.coverage.run]
+branch = true
+source = ["roboflow_dice_test"]
